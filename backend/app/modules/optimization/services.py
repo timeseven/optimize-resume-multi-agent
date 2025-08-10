@@ -49,6 +49,10 @@ class OptimizationService(IOptimizationService):
         3. Store outputs from each agent
         4. Update task status
         """
+        existing_task = await self.optimization_repo.get_user_task(user_id=user_id, job_id=job_id, resume_id=resume_id)
+        if existing_task:
+            return existing_task.id
+
         try:
             task_id = await self.optimization_repo.create_task(user_id=user_id, resume_id=resume_id, job_id=job_id)
 
@@ -63,7 +67,6 @@ class OptimizationService(IOptimizationService):
             # Run the graph workflow
             final_state = await self.agent_service.run(initial_state)
             if final_state.get("error"):
-                print(">>>>>>>>>>>>")
                 await self.optimization_repo.update_task(
                     task_id=task_id,
                     data={"status": "failed", "finished_at": datetime.now(timezone.utc)},
@@ -78,10 +81,13 @@ class OptimizationService(IOptimizationService):
                 task_id=task_id, data={"status": "finished", "finished_at": datetime.now(timezone.utc)}
             )
 
-            return {"task_id": task_id, "status": "finished", "results": final_state}
+            return task_id
         except Exception as e:
             if "task_id" in locals():
                 await self.optimization_repo.update_task(
                     task_id=task_id, data={"status": "failed", "finished_at": datetime.now(timezone.utc)}
                 )
             raise OptimizationBadRequest(detail=str(e))
+
+    async def delete_task(self, user_id: int, task_id: int):
+        await self.optimization_repo.delete_task(user_id, task_id)

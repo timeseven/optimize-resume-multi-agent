@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile
+from fastapi import APIRouter, UploadFile, status
 
 from app.modules.auth.deps import UserDep
 from app.modules.resume.deps import ResumeServiceDep
@@ -11,7 +11,7 @@ async def get_resumes(user: UserDep, resume_service: ResumeServiceDep):
     return await resume_service.get_resumes(user_id=user.id)
 
 
-@resume_router.post("")
+@resume_router.post("", status_code=status.HTTP_201_CREATED)
 async def create_resume(user: UserDep, resume_service: ResumeServiceDep, file: UploadFile):
     await resume_service.create_resume(user_id=user.id, file=file)
     return {"message": "Resume uploaded successfully."}

@@ -17,11 +17,20 @@ class GapDetectorAgent:
         Compare the resume and job description to identify gaps and provide actionable recommendations.
 
         IMPORTANT RULES:
-        1. Return ONLY a valid JSON object with the exact structure shown below
-        2. Be specific and actionable in recommendations
-        3. Prioritize the most critical gaps first
-        4. Consider both hard skills and soft skills
-        5. Provide realistic timelines for addressing gaps
+        1. Return ONLY a valid JSON object with the exact structure shown below.
+        2. Be specific and actionable in recommendations.
+        3. Prioritize the most critical gaps first.
+        4. Consider both hard skills and soft skills.
+        5. Provide realistic timelines for addressing gaps.
+        6. When a skill or experience is mentioned in the resume, even if briefly or without detailed examples,
+        treat it as partially met rather than fully missing.
+        7. Only list gaps for skills or qualifications that are clearly missing or insufficient according to the
+        job requirements.
+        8. Treat experience equal to or exceeding the stated requirement as meeting the requirement; only highlight
+        gaps if experience is clearly below the requirement.
+        9. Balance the overall match score by weighing both strengths and gaps; avoid overly harsh scoring for minor
+        differences.
+        10. Recommendations should be practical and prioritized by impact and effort.
 
         Required JSON structure:
         ```json

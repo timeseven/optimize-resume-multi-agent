@@ -7,9 +7,13 @@ class IOptimizationService(ABC):
         pass
 
     @abstractmethod
+    async def get_user_tasks(self, user_id: int):
+        pass
+
+    @abstractmethod
     async def get_task_status(self, user_id: int, task_id: int):
         pass
 
     @abstractmethod
-    async def get_user_tasks(self, user_id: int):
+    async def delete_task(self, user_id: int, task_id: int):
         pass

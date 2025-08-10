@@ -1,8 +1,8 @@
 """create tables
 
-Revision ID: 93f4a148c813
+Revision ID: 4a85e845abdd
 Revises: 
-Create Date: 2025-08-04 20:44:10.724982
+Create Date: 2025-08-10 16:48:12.796117
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import sqlite
 
 # revision identifiers, used by Alembic.
-revision: str = '93f4a148c813'
+revision: str = '4a85e845abdd'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -44,6 +44,9 @@ def upgrade() -> None:
     op.create_table('resumes',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('file_name', sa.String(length=255), nullable=True),
+    sa.Column('file_size', sa.Integer(), nullable=True),
+    sa.Column('file_type', sa.String(length=255), nullable=True),
     sa.Column('raw_text', sa.Text(), nullable=False),
     sa.Column('parsed_json', sqlite.JSON(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),

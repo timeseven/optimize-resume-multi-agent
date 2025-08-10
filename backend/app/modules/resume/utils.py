@@ -30,3 +30,11 @@ def extract_docx_text(file: UploadFile) -> str:
     with io.BytesIO(file_bytes) as f:
         text = docx2txt.process(f)
     return text or ""
+
+
+def get_file_size(fileobj):
+    pos = fileobj.tell()
+    fileobj.seek(0, 2)
+    size = fileobj.tell()
+    fileobj.seek(pos)
+    return size

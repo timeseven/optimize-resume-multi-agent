@@ -1,3 +1,4 @@
+from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 from app.core.config import settings
@@ -12,6 +13,14 @@ class Database:
             str(settings.DATABASE_URL),
             echo=settings.ECHO,
         )
+
+        if "sqlite" in str(settings.DATABASE_URL):
+
+            @event.listens_for(self._engine.sync_engine, "connect")
+            def enable_sqlite_foreign_keys(dbapi_connection, connection_record):
+                cursor = dbapi_connection.cursor()
+                cursor.execute("PRAGMA foreign_keys=ON;")
+                cursor.close()
 
     async def disconnect(self):
         if self._engine:
